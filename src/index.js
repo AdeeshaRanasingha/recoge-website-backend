@@ -7,7 +7,8 @@ import cors from "cors";
 
 const server = express();
 server.use(express.json());
-server.use(cors({ origin: "http://localhost:5173" }));
+const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
+server.use(cors({ origin: allowedOrigin }));
 
 
 server.use("/api/products", productRouter);
