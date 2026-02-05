@@ -1,10 +1,21 @@
 import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema({
-  userId: { type: String, required: true }, // Clerk User ID
+  userId: { type: String, required: true },
   customerName: { type: String },
   customerEmail: { type: String },
+  
+  // 👇 ADD THIS
+  customerPhone: { type: String }, 
+  
+  shippingAddress: {
+    line1: { type: String },
+    city: { type: String },
+    postalCode: { type: String },
+    country: { type: String, default: "Sri Lanka" }
+  },
   items: [
+    // ... items schema (keep as is)
     {
       productId: String,
       title: String,
@@ -16,10 +27,11 @@ const OrderSchema = new mongoose.Schema({
     }
   ],
   totalAmount: { type: Number, required: true },
-  paymentId: { type: String, required: true }, // Stripe Payment Intent ID
+  paymentId: { type: String, required: true }, 
   status: { type: String, default: "Processing" },
-  adminMessage: { type: String }, // <--- ADD THIS
-  updatedAt: { type: Date, default: Date.now },
+  adminMessage: { type: String },
+  deliveredAt: { type: Date }, 
+  thankYouEmailSent: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 

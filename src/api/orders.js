@@ -3,18 +3,21 @@ import { Order } from '../infrastructure/entities/Order.js';
 
 const router = express.Router();
 
-// Route to Create a New Order
+// Inside router.post('/')
 router.post('/', async (req, res) => {
   try {
-    const { userId, customerName, customerEmail, items, totalAmount, paymentId } = req.body;
+    // 👇 Add customerPhone to destructuring
+    const { userId, customerName, customerEmail, customerPhone, items, totalAmount, paymentId, shippingAddress } = req.body;
 
     const newOrder = await Order.create({
       userId,
       customerName,
       customerEmail,
+      customerPhone, // 👇 Save it
       items,
       totalAmount,
-      paymentId
+      paymentId,
+      shippingAddress
     });
 
     res.status(201).json(newOrder);
@@ -53,25 +56,24 @@ router.put("/:id/status", async (req, res) => {
     const { id } = req.params;
     const { status, message } = req.body;
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-      id,
-      { 
-        status: status,
-        adminMessage: message,
-        updatedAt: new Date()
-      },
-      { new: true } // Return the updated document
-    );
+    // Prepare update object
+    let updateData = {
+      status: status,
+      adminMessage: message,
+      updatedAt: new Date()
+    };
 
-    if (!updatedOrder) {
-      return res.status(404).json({ error: "Order not found" });
+    // 👇 IF MARKING AS DELIVERED, SET TIMESTAMP
+    if (status === "Delivered") {
+        updateData.deliveredAt = new Date();
     }
 
+    const updatedOrder = await Order.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedOrder) return res.status(404).json({ error: "Order not found" });
     res.json(updatedOrder);
   } catch (error) {
-    console.error("Error updating order:", error);
-    res.status(500).json({ error: "Failed to update order" });
+    // ... error handling
   }
 });
-
 export default router;

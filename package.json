@@ -14,6 +14,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -21,6 +22,8 @@
     "mongodb": "^7.0.0",
     "mongoose": "^9.0.2",
     "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^8.0.0",
     "stripe": "^20.3.0",
     "twilio": "^5.11.2"
   },
